@@ -1,9 +1,9 @@
-﻿using RX_Client.Utils;
+﻿using RX_Client_WPF.Utils;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Threading.Tasks;
 
-namespace RX_Client.Services
+namespace RX_Client_WPF.Services
 {
     public class ApiService
     {

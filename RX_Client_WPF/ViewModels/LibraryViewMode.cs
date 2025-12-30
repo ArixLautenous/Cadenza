@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RX_Client.Services;
+using RX_Client_WPF.Services;
 using System.Collections.ObjectModel;
 
-namespace RX_Client.ViewModels
+namespace RX_Client_WPF.ViewModels
 {
     public partial class LibraryViewModel : ObservableObject
     {

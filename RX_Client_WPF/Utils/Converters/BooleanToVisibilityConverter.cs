@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace RX_Client.Utils.Converters
+namespace RX_Client_WPF.Utils.Converters
 {
     // Class này phải là public để XAML nhìn thấy được
     public class BooleanToVisibilityConverter : IValueConverter

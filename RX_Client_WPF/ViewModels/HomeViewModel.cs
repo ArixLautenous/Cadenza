@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RX_Client.Services;
-using RX_Client.ViewModels;
+using RX_Client_WPF.Services;
+using RX_Client_WPF.ViewModels;
 using Shared.DTOs;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 
-namespace RX_Client.ViewModels
+namespace RX_Client_WPF.ViewModels
 {
     public partial class HomeViewModel : ObservableObject
     {

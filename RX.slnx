@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="RX Server/RX_Server.csproj" />
   <Project Path="RX_Client_WF/RX_Client_WF.csproj" Id="08bce1b2-8ff9-4fa2-961b-f2eae0ed1ca6" />
+  <Project Path="RX_Client_WPF/RX_Client_WPF.csproj" />
   <Project Path="Shared/Shared.csproj" />
 </Solution>

@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using RX_Client.Services;
+using RX_Client_WPF.Services;
 using System.Windows;
 
-namespace RX_Client.ViewModels
+namespace RX_Client_WPF.ViewModels
 {
     public partial class UploadViewModel : ObservableObject
     {

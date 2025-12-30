@@ -1,4 +1,4 @@
-﻿namespace RX_Client.Utils
+﻿namespace RX_Client_WPF.Utils
 {
     public static class Config
     {

@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace RX_Client
+namespace RX_Client_WPF
 {
     /// <summary>
     /// Interaction logic for App.xaml

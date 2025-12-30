@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace MusicStreaming.Client.Services
+namespace RX_Client_WPF.Services
 {
     public class AudioPlayer : IDisposable
     {
