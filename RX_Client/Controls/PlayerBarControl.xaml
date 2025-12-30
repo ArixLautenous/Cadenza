@@ -1,0 +1,120 @@
+﻿<UserControl x:Class="RX_Client.Controls.PlayerBarControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="90" d:DesignWidth="1000">
+
+    <Grid Background="#212121">
+        <!-- Màu xám đậm YouTube -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <!-- Info bài hát -->
+            <ColumnDefinition Width="*"/>
+            <!-- Controls + Seekbar -->
+            <ColumnDefinition Width="300"/>
+            <!-- Volume + Queue -->
+        </Grid.ColumnDefinitions>
+
+        <!-- PHẦN TRÁI: Info -->
+        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+            <!-- Ảnh bìa -->
+            <Border Width="56" Height="56" CornerRadius="4" ClipToBounds="True">
+                <Image Source="{Binding CurrentSong.ThumbnailUrl, TargetNullValue=/Assets/Images/default_cover.png}" Stretch="UniformToFill"/>
+            </Border>
+
+            <!-- Tên bài + Nghệ sĩ -->
+            <StackPanel VerticalAlignment="Center" Margin="15,0,0,0">
+                <TextBlock Text="{Binding CurrentSong.Title, TargetNullValue='Chưa chọn bài hát'}" 
+                           Foreground="White" FontWeight="Bold" FontSize="14"/>
+                <TextBlock Text="{Binding CurrentSong.ArtistName, TargetNullValue='...'}" 
+                           Foreground="#AAAAAA" FontSize="12" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Nút Like -->
+            <Button Style="{DynamicResource MaterialDesignIconButton}" Foreground="#AAAAAA" Margin="10,0,0,0">
+                <materialDesign:PackIcon Kind="HeartOutline"/>
+            </Button>
+        </StackPanel>
+
+        <!-- PHẦN GIỮA: Controls -->
+        <Grid Grid.Column="1" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Buttons -->
+                <RowDefinition Height="Auto"/>
+                <!-- Slider -->
+            </Grid.RowDefinitions>
+
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
+                <Button Style="{DynamicResource MaterialDesignIconButton}" ToolTip="Shuffle" Foreground="#AAAAAA">
+                    <materialDesign:PackIcon Kind="Shuffle"/>
+                </Button>
+
+                <Button Style="{DynamicResource MaterialDesignIconButton}" ToolTip="Previous" Foreground="White" Width="40" Height="40">
+                    <materialDesign:PackIcon Kind="SkipPrevious" Width="28" Height="28"/>
+                </Button>
+
+                <!-- PLAY / PAUSE -->
+                <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}" 
+                        Background="White" BorderBrush="White"
+                        Command="{Binding TogglePlayPauseCommand}"
+                        Width="45" Height="45" Margin="15,0,15,0">
+                    <materialDesign:PackIcon Kind="{Binding IsPlaying, Converter={DynamicResource BoolToVis}, ConverterParameter=Pause}" 
+                                             Width="32" Height="32" Foreground="Black">
+                        <materialDesign:PackIcon.Style>
+                            <Style TargetType="materialDesign:PackIcon">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                        <Setter Property="Kind" Value="Pause"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlaying}" Value="False">
+                                        <Setter Property="Kind" Value="Play"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </materialDesign:PackIcon.Style>
+                    </materialDesign:PackIcon>
+                </Button>
+
+                <Button Style="{DynamicResource MaterialDesignIconButton}" ToolTip="Next" Foreground="White" Width="40" Height="40">
+                    <materialDesign:PackIcon Kind="SkipNext" Width="28" Height="28"/>
+                </Button>
+
+                <Button Style="{DynamicResource MaterialDesignIconButton}" ToolTip="Repeat" Foreground="#AAAAAA">
+                    <materialDesign:PackIcon Kind="Repeat"/>
+                </Button>
+            </StackPanel>
+
+            <!-- Seekbar (Slider) -->
+            <Grid Grid.Row="1" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding CurrentTimeString}" Foreground="#AAAAAA" FontSize="11" Margin="0,0,10,0"/>
+
+                <Slider Grid.Column="1" 
+                        Minimum="0" Maximum="{Binding TotalDurationSeconds}" 
+                        Value="{Binding CurrentPositionSeconds}"
+                        Style="{DynamicResource MaterialDesignDiscreteSlider}" 
+                        IsMoveToPointEnabled="True"
+                        Thumb.DragCompleted="Slider_DragCompleted"
+                        Foreground="White"/>
+
+                <TextBlock Grid.Column="2" Text="{Binding TotalTimeString}" Foreground="#AAAAAA" FontSize="11" Margin="10,0,0,0"/>
+            </Grid>
+        </Grid>
+
+        <!-- PHẦN PHẢI: Volume -->
+        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
+            <materialDesign:PackIcon Kind="VolumeHigh" Foreground="#AAAAAA" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <Slider Width="100" Minimum="0" Maximum="1" Value="{Binding Volume}" Foreground="White" VerticalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

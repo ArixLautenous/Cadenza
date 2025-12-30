@@ -1,0 +1,121 @@
+﻿<Window x:Class="RX_Client.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:RX_Client.ViewModels"
+        xmlns:views="clr-namespace:RX_Client.Views"
+        xmlns:controls="clr-namespace:RX_Client.Controls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Candeza" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen"
+        Background="#030303"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+
+    <!-- Đăng ký ViewModel để code behind tự động gán DataContext -->
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <!-- Template cũ -->
+        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+            <views:LoginView/>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <views:HomeView/>
+        </DataTemplate>
+
+        <!-- THÊM CÁC DÒNG NÀY -->
+        <DataTemplate DataType="{x:Type vm:RegisterViewModel}">
+            <views:RegisterView/>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:LibraryViewModel}">
+            <views:LibraryView/>
+        </DataTemplate>
+
+        <!-- Lưu ý namespace cho UploadView -->
+        <DataTemplate DataType="{x:Type vm:UploadViewModel}">
+            <views:ArtistHub:UploadView xmlns:views:ArtistHub="clr-namespace:RX_Client.Views.ArtistHub"/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Khi CHƯA đăng nhập: Hiện LoginView full màn hình -->
+        <Grid Visibility="{Binding IsLoggedIn, Converter={StaticResource InverseBool}}">
+            <!-- ContentControl sẽ tự động chọn View dựa vào DataTemplate ở trên -->
+            <ContentControl Content="{Binding CurrentView}"/>
+        </Grid>
+
+        <!-- Khi ĐÃ đăng nhập: Hiện Layout chính (Sidebar + Content + Player) -->
+        <Grid Visibility="{Binding IsLoggedIn, Converter={StaticResource BoolToVis}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <!-- Content Area -->
+                <RowDefinition Height="Auto"/>
+                <!-- Player Bar -->
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="240"/>
+                    <!-- Sidebar -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Main Content -->
+                </Grid.ColumnDefinitions>
+
+                <!-- SIDEBAR TRÁI -->
+                <Border Grid.Column="0" Background="#121212" BorderBrush="#333" BorderThickness="0,0,1,0">
+                    <StackPanel Margin="10">
+                        <!-- Logo -->
+                        <StackPanel Orientation="Horizontal" Margin="15,20,0,30">
+                            <materialDesign:PackIcon Kind="Headphones" Width="30" Height="30" Foreground="White" VerticalAlignment="Center"/>
+                            <TextBlock Text="MusicApp" FontSize="20" FontWeight="Bold" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Menu Items -->
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding NavigateToHomeCommand}"
+                                Height="50" HorizontalContentAlignment="Left" Foreground="White" FontSize="16">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Home" Margin="0,0,15,0"/>
+                                <TextBlock Text="Trang chủ"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" Command="{Binding NavigateToLibraryCommand}"
+                                Height="50" HorizontalContentAlignment="Left" Foreground="#AAAAAA" FontSize="16">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Bookshelf" Margin="0,0,15,0"/>
+                                <TextBlock Text="Thư viện"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Separator Background="#333" Margin="0,10"/>
+
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" 
+                                Height="50" HorizontalContentAlignment="Left" Foreground="#AAAAAA" FontSize="16">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="PlusBox" Margin="0,0,15,0"/>
+                                <TextBlock Text="Tạo Playlist"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- User Info & Logout -->
+                        <StackPanel VerticalAlignment="Bottom" Margin="0,200,0,0">
+                            <TextBlock Text="{Binding UserName, StringFormat='Hi, {0}'}" Foreground="White" Margin="15,0,0,10"/>
+                            <Button Command="{Binding LogoutCommand}" Content="Đăng xuất" Style="{StaticResource MaterialDesignOutlinedButton}" Foreground="White" BorderBrush="White"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- MAIN CONTENT AREA -->
+                <!-- Nơi các trang con (Home, Library) hiển thị -->
+                <ContentControl Grid.Column="1" Content="{Binding CurrentView}" Margin="0,0,0,0"/>
+            </Grid>
+
+            <!-- PLAYER BAR (Luôn nằm dưới cùng) -->
+            <!-- Bind DataContext của PlayerBar vào PlayerVM con của MainViewModel -->
+            <controls:PlayerBarControl Grid.Row="1" DataContext="{Binding PlayerVM}"/>
+        </Grid>
+    </Grid>
+</Window>

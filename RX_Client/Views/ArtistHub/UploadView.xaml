@@ -1,0 +1,110 @@
+﻿<UserControl
+    x:Class="RX_Client.Views.ArtistHub.UploadView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:RX_Client.Utils.Converters;assembly=RX_Client"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    d:DesignHeight="600"
+    d:DesignWidth="800">
+
+    <Grid>
+        <StackPanel
+            MaxWidth="600"
+            Margin="40"
+            HorizontalAlignment="Left">
+            <TextBlock
+                Margin="0,0,0,30"
+                FontSize="28"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="Đăng tải nhạc mới" />
+
+            <!--  Tên bài hát  -->
+            <TextBox
+                Margin="0,0,0,20"
+                materialDesign:HintAssist.Hint="Tên bài hát"
+                Foreground="White"
+                Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                Text="{Binding Title}" />
+
+            <!--  Chọn Genre (Demo hardcode item, thực tế nên bind từ API)  -->
+            <ComboBox
+                Margin="0,0,0,20"
+                materialDesign:HintAssist.Hint="Thể loại"
+                Foreground="White"
+                SelectedIndex="0"
+                Style="{DynamicResource MaterialDesignFloatingHintComboBox}">
+                <ComboBoxItem Content="Pop" />
+                <ComboBoxItem Content="Rock" />
+                <ComboBoxItem Content="Ballad" />
+                <ComboBoxItem Content="Rap/HipHop" />
+            </ComboBox>
+
+            <!--  Checkbox Exclusive  -->
+            <CheckBox
+                Margin="0,0,0,30"
+                Content="Nội dung độc quyền (Chỉ Audiophile mới nghe được)"
+                Foreground="White"
+                IsChecked="{Binding IsExclusive}" />
+
+            <!--  File Nhạc  -->
+            <TextBlock
+                Margin="0,0,0,5"
+                Foreground="Gray"
+                Text="File Âm thanh" />
+            <DockPanel Margin="0,0,0,20">
+                <Button
+                    Width="100"
+                    Command="{Binding BrowseAudioCommand}"
+                    Content="Chọn file..."
+                    DockPanel.Dock="Right" />
+                <TextBox
+                    VerticalAlignment="Center"
+                    Foreground="White"
+                    IsReadOnly="True"
+                    Text="{Binding AudioPath}" />
+            </DockPanel>
+
+            <!--  File Ảnh  -->
+            <TextBlock
+                Margin="0,0,0,5"
+                Foreground="Gray"
+                Text="Ảnh bìa" />
+            <DockPanel Margin="0,0,0,40">
+                <Button
+                    Width="100"
+                    Command="{Binding BrowseImageCommand}"
+                    Content="Chọn ảnh..."
+                    DockPanel.Dock="Right" />
+                <TextBox
+                    VerticalAlignment="Center"
+                    Foreground="White"
+                    IsReadOnly="True"
+                    Text="{Binding ImagePath}" />
+            </DockPanel>
+
+            <!--  Nút Upload  -->
+            <Button
+                Height="50"
+                Command="{Binding UploadCommand}"
+                Content="UPLOAD NGAY"
+                FontSize="16"
+                IsEnabled="{Binding IsUploading, Converter={StaticResource InverseBool}}"
+                Style="{DynamicResource MaterialDesignRaisedButton}" />
+
+            <StackPanel
+                Margin="0,20,0,0"
+                Orientation="Horizontal"
+                Visibility="{Binding IsUploading, Converter={StaticResource BoolToVis}}">
+                <ProgressBar IsIndeterminate="True" Style="{DynamicResource MaterialDesignCircularProgressBar}" />
+                <TextBlock
+                    Margin="15,0,0,0"
+                    VerticalAlignment="Center"
+                    Foreground="#FFD700"
+                    Text="{Binding UploadStatus}" />
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

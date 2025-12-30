@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="MaterialDesignColors" Version="5.3.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
+    <PackageReference Include="MaterialDesignThemes.MahApps" Version="5.3.0" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="RestSharp" Version="113.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Controls\*.xaml" SubType="Designer" />
+    <Page Update="Views\*.xaml" SubType="Designer" />
+    <Compile Update="Controls\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
+    <Compile Update="Views\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
+  </ItemGroup>
+
+</Project>
