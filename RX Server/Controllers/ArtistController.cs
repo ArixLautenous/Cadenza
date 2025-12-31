@@ -75,7 +75,7 @@ namespace RX_Server.Controllers
             await _context.SaveChangesAsync();
 
             // --- BẮT ĐẦU TÁCH BEAT (DEMUCS) ---
-            string storagePath = Path.Combine(_env.WebRootPath, "audio", "storage");
+            string storagePath = Path.Combine(_env.WebRootPath, "audio", "lossless");
             string ext = Path.GetExtension(request.AudioFile.FileName);
             // StreamingService thường lưu file với tên là {SongId}{OriginalExtension}
             string inputFilePath = Path.Combine(storagePath, $"{song.Id}{ext}");

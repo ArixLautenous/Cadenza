@@ -5,6 +5,14 @@ import subprocess
 from pathlib import Path
 import warnings
 
+# Try to set torchaudio backend to soundfile to fix Windows save error
+try:
+    import torchaudio
+    if hasattr(torchaudio, "set_audio_backend"):
+        torchaudio.set_audio_backend("soundfile")
+except:
+    pass
+
 # Suppress warnings
 warnings.filterwarnings("ignore")
 
@@ -23,7 +31,7 @@ def split_audio(input_path, output_dir):
     
     # 1. RUN DEMUCS
     command = [
-        "demucs",
+        sys.executable, "-m", "demucs",
         "-n", "htdemucs", 
         "--two-stems", "vocals",
         str(input_file),
@@ -47,15 +55,20 @@ def split_audio(input_path, output_dir):
             print(f"INSTRUMENTAL|{no_vocals_path.absolute()}")
             
             # 2. RUN WHISPER (Transcribe Vocals)
-            print("Transcribing lyrics with Whisper...")
+            print("-" * 30)
+            print("Step 2: Transcribing lyrics with Whisper...")
+            print("Note: First run might download the model (approx 150MB). Please wait...")
             try:
                 import whisper
-                # Load model (base is faster, small is more accurate)
+                print("Loading Whisper 'base' model...")
                 model = whisper.load_model("base") 
                 
                 # Transcribe
-                result = model.transcribe(str(vocals_path))
+                print(f"Transcribing file: {vocals_path.name}")
+                # fp16=False de tranh loi tren CPU hoac GPU cu
+                result = model.transcribe(str(vocals_path), fp16=False)
                 lyrics_text = result["text"].strip()
+                print("Transcription completed.")
                 
                 # Save to file
                 lyrics_file = track_folder / "lyrics.txt"

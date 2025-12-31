@@ -56,6 +56,37 @@ namespace RX_Server.Controllers
             return Ok(songs);
         }
 
+        // GET: api/songs/5
+        // Lấy chi tiết bài hát
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var s = await _context.Songs
+                .Include(x => x.Album)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (s == null) return NotFound();
+
+            var songDto = new
+            {
+                s.Id,
+                s.Title,
+                s.ArtistName,
+                s.Duration,
+                s.IsExclusive,
+                AlbumName = s.Album != null ? s.Album.Title : "Unknown Album",
+                s.GenreId,
+                ThumbnailUrl = !string.IsNullOrEmpty(s.CoverImageUrl) 
+                    ? $"{Request.Scheme}://{Request.Host}/images/covers/{s.CoverImageUrl}"
+                    : $"{Request.Scheme}://{Request.Host}/images/covers/{s.Id}.jpg",
+                // Karaoke
+                s.Lyrics,
+                InstrumentalUrl = s.InstrumentUrl,
+                s.VocalUrl
+            };
+            return Ok(songDto);
+        }
+
         // GET: api/songs/search?query=...
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string query)

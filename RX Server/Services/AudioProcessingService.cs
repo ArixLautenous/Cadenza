@@ -44,8 +44,35 @@ namespace RX_Server.Services
 
                 using var process = new Process { StartInfo = startInfo };
                 
+                // StringBuilder dể gom output cuối cùng
+                var outputBuilder = new System.Text.StringBuilder();
+                var errorBuilder = new System.Text.StringBuilder();
+
+                // Lắng nghe output realtime
+                process.OutputDataReceived += (sender, args) => 
+                {
+                    if (args.Data != null)
+                    {
+                        Console.WriteLine($"[Py] {args.Data}");
+                        outputBuilder.AppendLine(args.Data);
+                    }
+                };
+
+                process.ErrorDataReceived += (sender, args) => 
+                {
+                    if (args.Data != null)
+                    {
+                        // Demucs/Whisper thường in progress bar ra stderr
+                        Console.WriteLine($"[Py Err] {args.Data}"); 
+                        errorBuilder.AppendLine(args.Data);
+                    }
+                };
+
                 Console.WriteLine($"[AudioProcessing] Starting Demucs for Song {songId}...");
                 process.Start();
+                
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
 
                 try 
                 { 
@@ -53,23 +80,18 @@ namespace RX_Server.Services
                 } 
                 catch { }
 
-                // Đọc luồng Output và Error song song để tránh Deadlock
-                var outputTask = process.StandardOutput.ReadToEndAsync();
-                var errorTask = process.StandardError.ReadToEndAsync();
-
-                await Task.WhenAll(outputTask, errorTask);
                 await process.WaitForExitAsync();
 
-                string output = outputTask.Result;
-                string error = errorTask.Result;
+                string output = outputBuilder.ToString();
+                string error = errorBuilder.ToString();
 
                 if (process.ExitCode != 0)
                 {
                     Console.WriteLine($"[Demucs Error] ExitCode: {process.ExitCode}");
-                    Console.WriteLine($"[Demucs Stderr] {error}");
                 }
                 
-                Console.WriteLine($"[Demucs Output] {output}");
+                // Phân tích Output để lấy đường dẫn file (Logic cũ)
+                // ...
 
                 // Phân tích Output để lấy đường dẫn file
                 // Format mong đợi từ script python:

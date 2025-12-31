@@ -189,6 +189,24 @@ namespace RX_Client_WF.Forms
                 
                 // Quan trọng: Cập nhật nút Play/Pause
                 playerBar.SetPlayingState(true);
+
+                // --- FETCH INFO MỚI NHẤT (Lyric, Karaoke) ---
+                _ = Task.Run(async () => 
+                {
+                    try 
+                    {
+                        var api = new ApiService();
+                        var updatedSong = await api.GetAsync<SongDto>($"/api/songs/{song.Id}");
+                        if (updatedSong != null)
+                        {
+                            this.Invoke((MethodInvoker)delegate 
+                            {
+                                if (_ucNowPlaying != null) _ucNowPlaying.SetSong(updatedSong);
+                            });
+                        }
+                    }
+                    catch { }
+                });
             }
             finally
             {
