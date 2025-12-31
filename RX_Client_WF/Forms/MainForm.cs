@@ -152,7 +152,7 @@ namespace RX_Client_WF.Forms
 
         private void ShowSettings()
         {
-            var uc = new UCSettings();
+            var uc = new UCSettings(_player);
             uc.LogoutClicked += BtnLogout_Click;
             LoadView(uc);
             SetActiveButton(btnSettings);

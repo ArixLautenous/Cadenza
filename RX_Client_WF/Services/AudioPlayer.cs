@@ -9,6 +9,7 @@ namespace RX_Client_WF.Services
     {
         private IWavePlayer _outputDevice;
         private WaveStream _audioFile;
+        private EqualizerProvider _equalizer;
         public event EventHandler PlaybackStopped;
         private bool _suppressStopEvent = false;
 
@@ -30,6 +31,12 @@ namespace RX_Client_WF.Services
             // Khởi tạo Timer cập nhật tiến độ (1 giây 1 lần)
             PlaybackTimer = new System.Windows.Forms.Timer();
             PlaybackTimer.Interval = 1000;
+        }
+        
+        // API chỉnh EQ
+        public void SetEq(int bandIndex, float gain)
+        {
+            _equalizer?.UpdateGain(bandIndex, gain);
         }
 
         public async Task PlayUrlAsync(string url)
@@ -66,7 +73,11 @@ namespace RX_Client_WF.Services
                 // 2. Khởi tạo Player (Bỏ Task.Run để tránh lỗi Threading với COM Object)
                 _audioFile = new MediaFoundationReader(url);
 
-                _outputDevice.Init(_audioFile);
+                // --- EQ PIPELINE ---
+                var sampleProvider = _audioFile.ToSampleProvider();
+                _equalizer = new EqualizerProvider(sampleProvider);
+                
+                _outputDevice.Init(_equalizer);
                 _outputDevice.Play();
 
                 PlaybackTimer.Start(); // Bắt đầu đếm giờ

@@ -65,7 +65,7 @@ namespace RX_Client_WF.Forms
             this.btnProfile = CreateMenuButton("Hồ sơ", 220, "👤"); // Nút mới
             this.btnUpload = CreateMenuButton("Upload Nhạc", 280, "⬆️");
             this.btnUpload.Visible = false;
-            this.btnSettings = CreateMenuButton("Cài đặt", 340, "⚙️");
+            this.btnSettings = CreateMenuButton("Cài đặt", 550, "⚙️");
 
             this.separator = new Guna2Separator();
             this.separator.Location = new Point(20, 580);
