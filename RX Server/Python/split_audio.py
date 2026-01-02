@@ -1,4 +1,3 @@
-
 import sys
 import os
 import subprocess
@@ -21,7 +20,6 @@ def split_audio(input_path, output_dir):
     Splits audio into vocals and instrumental using Demucs.
     Then transcribes vocals using Whisper.
     """
-    
     input_file = Path(input_path)
     if not input_file.exists():
         print(f"Error: Input file '{input_path}' not found.")
@@ -41,9 +39,33 @@ def split_audio(input_path, output_dir):
     try:
         subprocess.run(command, check=True)
         
-        # Demucs output path logic
-        model_name = "htdemucs"
-        track_folder = Path(output_dir) / model_name / input_file.stem
+        # Initialize Separator
+        sep = Separator(
+            log_level='ERROR', 
+            output_dir=str(track_folder),
+            output_format="wav"
+        )
+        
+        # Load ViperX Model
+        print("Loading Model: model_bs_roformer_ep_317_sdr_12.9755.ckpt")
+        sep.load_model(model_filename='model_bs_roformer_ep_317_sdr_12.9755.ckpt')
+        
+        # Separate
+        print("Running inference... (Max Performance Mode)")
+        output_files = sep.separate(str(input_file))
+        
+        # Rename output files to standard names
+        for fname in output_files:
+            full_path = track_folder / fname
+            lower_name = fname.lower()
+            
+            # ViperX yields: 'filename_(Vocals)_...' and 'filename_(Instrumental)_...'
+            if "(vocals)" in lower_name:
+                if vocals_path.exists(): os.remove(vocals_path)
+                os.rename(full_path, vocals_path)
+            elif "(instrumental)" in lower_name:
+                if no_vocals_path.exists(): os.remove(no_vocals_path)
+                os.rename(full_path, no_vocals_path)
         
         vocals_path = track_folder / "vocals.wav"
         no_vocals_path = track_folder / "no_vocals.wav"
@@ -68,9 +90,7 @@ def split_audio(input_path, output_dir):
                 # fp16=False de tranh loi tren CPU hoac GPU cu
                 result = model.transcribe(str(vocals_path), fp16=False)
                 lyrics_text = result["text"].strip()
-                print("Transcription completed.")
                 
-                # Save to file
                 lyrics_file = track_folder / "lyrics.txt"
                 with open(lyrics_file, "w", encoding="utf-8") as f:
                     f.write(lyrics_text)
