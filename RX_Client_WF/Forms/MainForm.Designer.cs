@@ -18,6 +18,7 @@ namespace RX_Client_WF.Forms
         private Guna2Button btnLibrary;
         private Guna2Button btnProfile; // MỚI THÊM
         private Guna2Button btnUpload;
+        private Guna2Button btnMashup;
         private Guna2Button btnSettings;
         private Guna2Button btnLogout;
         private Guna2Separator separator;
@@ -65,6 +66,9 @@ namespace RX_Client_WF.Forms
             this.btnProfile = CreateMenuButton("Hồ sơ", 220, "👤"); // Nút mới
             this.btnUpload = CreateMenuButton("Upload Nhạc", 280, "⬆️");
             this.btnUpload.Visible = false;
+            
+            this.btnMashup = CreateMenuButton("Mashup Lab", 340, "🧪");
+
             this.btnSettings = CreateMenuButton("Cài đặt", 550, "⚙️");
 
             this.separator = new Guna2Separator();
@@ -84,6 +88,7 @@ namespace RX_Client_WF.Forms
             this.pnSidebar.Controls.Add(btnLibrary);
             this.pnSidebar.Controls.Add(btnProfile); // Add nút Profile
             this.pnSidebar.Controls.Add(btnUpload);
+            this.pnSidebar.Controls.Add(btnMashup);
             this.pnSidebar.Controls.Add(btnSettings);
             this.pnSidebar.Controls.Add(separator);
             this.pnSidebar.Controls.Add(btnLogout);

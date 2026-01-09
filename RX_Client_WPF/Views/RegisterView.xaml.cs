@@ -1,4 +1,4 @@
-﻿using RX_Client.ViewModels;
+using RX_Client.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 

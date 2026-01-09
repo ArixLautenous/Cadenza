@@ -1,11 +1,11 @@
-﻿using RX_Client_WPF.Utils;
+using RX_Client.Utils;
 using Newtonsoft.Json;
 using RestSharp;
 using Shared.DTOs.Auth;
 using System;
 using System.Threading.Tasks;
 
-namespace RX_Client_WPF.Services
+namespace RX_Client.Services
 {
     public class AuthService
     {
@@ -16,10 +16,10 @@ namespace RX_Client_WPF.Services
             _client = new RestClient(Config.BaseUrl);
         }
 
-        public async Task<bool> LoginAsync(string username, string password)
+        public async Task<(bool Success, string Message)> LoginAsync(string username, string password)
         {
             var request = new RestRequest("/api/auth/login", Method.Post);
-            request.AddJsonBody(new LoginRequest { Username = username, Password = password });
+            request.AddJsonBody(new LoginRequest1 { Username = username, Password = password });
 
             try
             {
@@ -34,16 +34,23 @@ namespace RX_Client_WPF.Services
                     {
                         // Lưu thông tin vào Session (Singleton) để dùng toàn app
                         Session.StartSession(loginResponse);
-                        return true;
+                        return (true, "Đăng nhập thành công!");
                     }
                 }
+                
+                // Trả về lỗi từ server (nếu có)
+                if (!string.IsNullOrEmpty(response.Content))
+                {
+                    // Xử lý trường hợp trả về JSON lỗi hoặc text thuần
+                    return (false, response.Content.Trim('"')); 
+                }
+                
+                return (false, $"Lỗi server: {response.StatusCode}");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log lỗi
+                 return (false, $"Lỗi kết nối: {ex.Message}");
             }
-
-            return false;
         }
 
         public void Logout()

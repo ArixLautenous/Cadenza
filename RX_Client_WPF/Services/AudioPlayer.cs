@@ -1,8 +1,8 @@
-﻿using NAudio.Wave;
+using NAudio.Wave;
 using System;
 using System.Threading.Tasks;
 
-namespace RX_Client_WPF.Services
+namespace RX_Client.Services
 {
     public class AudioPlayer : IDisposable
     {

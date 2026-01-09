@@ -4,6 +4,7 @@
         xmlns:vm="clr-namespace:RX_Client.ViewModels"
         xmlns:views="clr-namespace:RX_Client.Views"
         xmlns:controls="clr-namespace:RX_Client.Controls"
+        xmlns:ah="clr-namespace:RX_Client.Views.ArtistHub"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Candeza" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen"
@@ -36,7 +37,7 @@
 
         <!-- Lưu ý namespace cho UploadView -->
         <DataTemplate DataType="{x:Type vm:UploadViewModel}">
-            <views:ArtistHub:UploadView xmlns:views:ArtistHub="clr-namespace:RX_Client.Views.ArtistHub"/>
+            <ah:UploadView />
         </DataTemplate>
     </Window.Resources>
 

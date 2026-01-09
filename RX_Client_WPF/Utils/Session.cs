@@ -1,7 +1,7 @@
-﻿using Shared.DTOs.Auth;
+using Shared.DTOs.Auth;
 using Shared.Enums;
 
-namespace RX_Client_WPF.Utils
+namespace RX_Client.Utils
 {
     public static class Session
     {

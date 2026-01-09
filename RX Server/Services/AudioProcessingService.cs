@@ -68,7 +68,7 @@ namespace RX_Server.Services
                     }
                 };
 
-                Console.WriteLine($"[AudioProcessing] Starting Demucs for Song {songId}...");
+                Console.WriteLine($"[AudioProcessing] Starting AI Engine (BS-Roformer/Whisper) for Song {songId}...");
                 process.Start();
                 
                 process.BeginOutputReadLine();

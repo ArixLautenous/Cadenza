@@ -63,6 +63,7 @@ namespace RX_Client_WF.Forms
             btnLibrary.Click += (s, e) => ShowLibrary();
             btnProfile.Click += (s, e) => ShowProfile(); // Logic mới
             btnUpload.Click += (s, e) => OpenUploadForm();
+            btnMashup.Click += (s, e) => ShowMashup();
             btnSettings.Click += (s, e) => ShowSettings();
             btnLogout.Click += BtnLogout_Click;
 
@@ -77,6 +78,7 @@ namespace RX_Client_WF.Forms
             AddHoverEffect(btnLibrary);
             AddHoverEffect(btnProfile);
             AddHoverEffect(btnUpload);
+            AddHoverEffect(btnMashup);
             AddHoverEffect(btnSettings);
 
             // 5. Mặc định vào trang chủ
@@ -156,6 +158,17 @@ namespace RX_Client_WF.Forms
             uc.LogoutClicked += BtnLogout_Click;
             LoadView(uc);
             SetActiveButton(btnSettings);
+        }
+
+        private void ShowMashup()
+        {
+            // Stop Main Player neu vao Mashup de tranh lan tieng
+            _player.Pause();
+            playerBar.SetPlayingState(false);
+            
+            var uc = new UCMashup();
+            LoadView(uc);
+            SetActiveButton(btnMashup);
         }
 
         private void LoadView(UserControl uc)
@@ -248,6 +261,7 @@ namespace RX_Client_WF.Forms
             btnLibrary.FillColor = Color.Transparent;
             btnProfile.FillColor = Color.Transparent;
             btnUpload.FillColor = Color.Transparent;
+            btnMashup.FillColor = Color.Transparent;
             btnSettings.FillColor = Color.Transparent;
 
             if (activeBtn != null)

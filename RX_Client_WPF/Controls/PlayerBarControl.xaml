@@ -63,8 +63,7 @@
                         Background="White" BorderBrush="White"
                         Command="{Binding TogglePlayPauseCommand}"
                         Width="45" Height="45" Margin="15,0,15,0">
-                    <materialDesign:PackIcon Kind="{Binding IsPlaying, Converter={DynamicResource BoolToVis}, ConverterParameter=Pause}" 
-                                             Width="32" Height="32" Foreground="Black">
+                    <materialDesign:PackIcon Width="32" Height="32" Foreground="Black">
                         <materialDesign:PackIcon.Style>
                             <Style TargetType="materialDesign:PackIcon">
                                 <Style.Triggers>

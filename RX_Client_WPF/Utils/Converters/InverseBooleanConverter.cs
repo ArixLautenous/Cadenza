@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 
 // Namespace này PHẢI KHỚP với dòng xmlns:converters trong App.xaml
-namespace RX_Client_WPF.Utils.Converters
+namespace RX_Client.Utils.Converters
 {
     // Class phải là public
     public class InverseBooleanConverter : IValueConverter

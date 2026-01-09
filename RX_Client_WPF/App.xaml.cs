@@ -1,8 +1,8 @@
-﻿using System.Configuration;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
-namespace RX_Client_WPF
+namespace RX_Client
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -1,12 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RX_Client_WPF.Services;
-using RX_Client_WPF.Utils;
-using RX_Client_WPF.ViewModels;
+using RX_Client.Services;
+using RX_Client.Utils;
+using RX_Client.ViewModels;
 using System.Windows;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
-namespace RX_Client_WPF.ViewModels
+namespace RX_Client.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
@@ -46,7 +46,7 @@ namespace RX_Client_WPF.ViewModels
             try
             {
                 // Gọi API Login
-                var success = await _authService.LoginAsync(Username, Password);
+                var (success, message) = await _authService.LoginAsync(Username, Password);
 
                 if (success)
                 {
@@ -55,12 +55,12 @@ namespace RX_Client_WPF.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Sai tên đăng nhập hoặc mật khẩu.";
+                    ErrorMessage = message;
                 }
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Lỗi kết nối: {ex.Message}";
+                ErrorMessage = $"Lỗi không xác định: {ex.Message}";
             }
             finally
             {
