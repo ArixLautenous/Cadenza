@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Lay chuoi ket noi tu file appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -21,13 +21,19 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 //THÊM CORS - QUAN TRỌNG CHO CLIENT
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? new[] { "*" };
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.AllowAnyOrigin()      // Cho phép mọi origin (localhost, 127.0.0.1...)
-              .AllowAnyMethod()      // Cho phép GET, POST, PUT, DELETE...
-              .AllowAnyHeader();     // Cho phép mọi header
+        if (allowedOrigins.Contains("*"))
+        {
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        }
+        else
+        {
+            policy.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+        }
     });
 });
 
@@ -83,6 +89,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
+        context.Database.Migrate(); // Tự động chạy file migration để tạo bảng
         DbInitializer.Seed(context); //Goi phuong thuc Seed de them du lieu mau
     }
     catch (Exception ex)
@@ -127,7 +134,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // SỬ DỤNG CORS - ĐẶT TRƯỚC UseAuthentication
-app.UseCors("AllowAll");
+app.UseCors("AllowSpecificOrigins");
 
 // Thu tu quan trong: Authen -> Author -> MapControllers
 app.UseAuthentication();
