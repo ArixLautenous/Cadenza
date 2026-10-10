@@ -11,6 +11,7 @@
 	  <ProjectionReference Include="C:\VSC C#\Source App Music\RX\Shared\Shared.csproj" />
 	  <PackageReference Include="AIC.Core.Security.Cryptography.Symmetric" Version="2025.12.25.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />

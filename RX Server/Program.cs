@@ -6,12 +6,18 @@ using RX_Server.Data;
 using RX_Server.Services;
 using System.Text;
 
+using DotNetEnv;
+
+// Load .env file
+Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Ket noi SQL
-//Lay chuoi ket noi tu file appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+//Lay chuoi ket noi tu file .env (uu tien) hoac appsettings.json
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") 
+    ?? builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string not found.");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 // Add services to the container.
